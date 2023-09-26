@@ -1,5 +1,7 @@
+import ResetClinet from "./ResetClinet";
+
 const Reset = () => {
-  return <div>Reset</div>;
+  return <ResetClinet />;
 };
 
 export default Reset;
