@@ -1,5 +1,7 @@
+import RegisterClient from "./RegisterClient";
+
 const Register = () => {
-  return <div>Register</div>;
+  return <RegisterClient></RegisterClient>;
 };
 
 export default Register;
