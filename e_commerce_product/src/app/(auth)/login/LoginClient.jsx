@@ -6,10 +6,13 @@ import Button from "@/components/button/Button";
 import Divider from "@/components/divider/Divider";
 import Input from "@/components/input/Input";
 import Loader from "@/components/loader/Loader";
+import { auth } from "@/firebase/firebase";
+import { GoogleAuthProvider, signInWithEmailAndPassword } from "firebase/auth";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import styles from "./Auth.module.scss";
 
 const LoginClient = () => {
@@ -27,9 +30,32 @@ const LoginClient = () => {
   const loginUser = (e) => {
     e.preventDefault();
     setIsLoading(true);
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        setIsLoading(false);
+        toast.success("로그인에 성공했습니다.");
+        redirectUser();
+      })
+      .catch((error) => {
+        toast.error("로그인에 실패했습니다.");
+        setIsLoading(false);
+      });
   };
 
-  const signInWithGoogle = () => {};
+  const signInWithGoogle = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithGoogle(auth, provider)
+      .then(() => {
+        setIsLoading(false);
+        toast.success("로그인에 성공했습니다.");
+        redirectUser();
+      })
+      .catch((error) => {
+        toast.error("로그인에 실패했습니다.");
+        setIsLoading(false);
+      });
+  };
 
   return (
     <>
