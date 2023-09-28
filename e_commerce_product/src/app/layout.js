@@ -2,6 +2,7 @@ import ToastProvider from "@/components/toastProvider/ToastProvider";
 import Footer from "@/layouts/footer/Footer";
 import Header from "@/layouts/header/Header";
 import { Inter } from "next/font/google";
+import { Provider } from "react-redux";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,11 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <>
+        <Provider>
           <Header />
           {children}
           <Footer />
-        </>
+        </Provider>
         <ToastProvider />
       </body>
     </html>
