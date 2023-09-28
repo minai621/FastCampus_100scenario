@@ -1,14 +1,17 @@
 "use client";
 import { auth } from "@/firebase/firebase";
+import { REMOVE_ACTIVE_USER, SET_ACTIVE_USER } from "@/redux/slice/authSlice";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import InnerHeader from "../innerHeader/InnerHeader";
 import styles from "./Header.module.scss";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const pathname = usePathname();
   const [displayName, setDisplayName] = useState("");
   const router = useRouter();
@@ -25,12 +28,21 @@ const Header = () => {
         }
 
         //  유저 정보를 리덕스 스토어에 저장하기
+        dispatch(
+          SET_ACTIVE_USER({
+            email: user.email,
+            userName: user.displayName ? user.displayName : displayName,
+            userId: user.uid,
+          })
+        );
+        dispatch;
       } else {
         setDisplayName("");
         // 유저 정보를 리덕스 스토어에서 지우기
+        dispatch(REMOVE_ACTIVE_USER());
       }
     });
-  }, [displayName]);
+  }, [dispatch, displayName]);
 
   const logoutUser = () => {
     signOut(auth)
