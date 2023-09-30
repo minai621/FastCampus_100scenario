@@ -1,5 +1,7 @@
+import AddProductClient from "./AddProductClient";
+
 const AddProduct = () => {
-  return <div>AdminAddProduct</div>;
+  return <AddProductClient />;
 };
 
-export default AdminAddProduct;
+export default AddProduct;
