@@ -13,8 +13,7 @@ import styles from "./ProductFilter.module.scss";
 const ProductFilter = () => {
   const [category, setCategory] = useState("All");
   const [brand, setBrand] = useState("All");
-  const [price, setPrice] = useState("10000");
-  console.log(category, brand, price);
+  const [price, setPrice] = useState(10000);
 
   const products = useSelector(selectProducts);
   const minPrice = useSelector(selectMinPrice);
@@ -25,6 +24,10 @@ const ProductFilter = () => {
     "All",
     ...new Set(products.map((product) => product.category)),
   ];
+
+  const filterCategories = (category) => {
+    setCategory(category);
+  };
 
   const allBrands = [
     "All",
@@ -45,13 +48,13 @@ const ProductFilter = () => {
     <div className={styles.filter}>
       <h4>카테고리</h4>
       <div className={styles.category}>
-        {allCategories.map((cat, index) => {
+        {allCategories.map((cat) => {
           return (
             <button
               key={cat}
               type="button"
               className={`${category}` === cat ? `${styles.active}` : ""}
-              onClick={() => setCategory(cat)}
+              onClick={() => filterCategories(cat)}
             >
               &#8250; {cat}
             </button>
