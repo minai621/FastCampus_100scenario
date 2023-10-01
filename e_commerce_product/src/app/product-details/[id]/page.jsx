@@ -1,5 +1,7 @@
+import ProductDetailsClient from "./productDetailsClient";
+
 const ProductDetails = () => {
-  return <div>ProductDetails</div>;
+  return <ProductDetailsClient />;
 };
 
 export default ProductDetails;
