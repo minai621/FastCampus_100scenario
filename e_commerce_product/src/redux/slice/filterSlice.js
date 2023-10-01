@@ -1,4 +1,4 @@
-const { createSlice } = require("@reduxjs/toolkit");
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   filteredProducts: [],
@@ -30,12 +30,12 @@ const filterSlice = createSlice({
       }
       state.filteredProducts = tempProducts;
     },
-
     FILTER_BY_PRICE: (state, action) => {
       const { products, price } = action.payload;
       let tempProducts = [];
 
       tempProducts = products.filter((product) => product.price <= price);
+
       state.filteredProducts = tempProducts;
     },
     FILTER_BY: (state, action) => {
@@ -49,7 +49,6 @@ const filterSlice = createSlice({
           (product) => product.category === category
         );
       }
-
       if (brand === "All") {
         tempProducts = tempProducts;
       } else {
@@ -62,16 +61,38 @@ const filterSlice = createSlice({
 
       state.filteredProducts = tempProducts;
     },
+    SORT_PRODUCTS: (state, action) => {
+      const { products, sort } = action.payload;
+      let tempProducts = [];
+      if (sort === "latest") {
+        tempProducts = products;
+      }
+
+      if (sort === "lowest-price") {
+        tempProducts = products.slice().sort((a, b) => {
+          return a.price - b.price;
+        });
+      }
+
+      if (sort === "highest-price") {
+        tempProducts = products.slice().sort((a, b) => {
+          return b.price - a.price;
+        });
+      }
+
+      state.filteredProducts = tempProducts;
+    },
   },
 });
 
 export const {
-  FILTER_BY_CATEGORY,
   FILTER_BY_BRAND,
+  FILTER_BY_CATEGORY,
   FILTER_BY_PRICE,
+  SORT_PRODUCTS,
   FILTER_BY,
 } = filterSlice.actions;
 
-export const selectFilteredProduct = (state) => state.filter.filteredProducts;
+export const selectFilteredProducts = (state) => state.filter.filteredProducts;
 
 export default filterSlice.reducer;
