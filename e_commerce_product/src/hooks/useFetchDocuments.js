@@ -1,5 +1,5 @@
 import { db } from "@/firebase/firebase";
-import { collection, getDocs, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import { useCallback, useEffect, useState } from "react";
 
 const useFetchDocuments = (collectionName, arg) => {
