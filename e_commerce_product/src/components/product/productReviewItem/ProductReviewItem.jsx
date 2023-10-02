@@ -1,5 +1,6 @@
 import { formatTime } from "@/utils/dayjs";
 import { Rating } from "react-simple-star-rating";
+import styles from "./ProductReviewItem.module.scss";
 
 const ProductReviewItem = ({ rate, review, reviewDate, userName }) => {
   return (
