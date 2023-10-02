@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import authReducer from "./slice/authSlice";
 import cartReducer from "./slice/cartSlice";
+import checkoutReducer from "./slice/checkoutSlice";
 import filterReducer from "./slice/filterSlice";
 import productReducer from "./slice/productSlice";
 
@@ -9,6 +10,7 @@ const rootReducer = combineReducers({
   product: productReducer,
   filter: filterReducer,
   cart: cartReducer,
+  checkout: checkoutReducer,
 });
 
 const store = configureStore({
