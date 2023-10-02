@@ -1,5 +1,7 @@
+import CheckoutClient from "./CheckoutClient";
+
 const Checkout = () => {
-  return <div>Checkout</div>;
+  return <CheckoutClient />;
 };
 
 export default Checkout;
