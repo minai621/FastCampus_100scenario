@@ -7,10 +7,12 @@ import Loader from "@/components/loader/Loader";
 import ProductReviewItem from "@/components/product/productReviewItem/ProductReviewItem";
 import useFetchDocument from "@/hooks/useFetchDocument";
 import useFetchDocuments from "@/hooks/useFetchDocuments";
+import { ADD_TO_CART, CALCULATE_TOTAL_QUANTITY } from "@/redux/slice/cartSlice";
 import priceFormat from "@/utils/priceFormat";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import { Rating } from "react-simple-star-rating";
 import styles from "./ProductDetails.module.scss";
 
@@ -29,6 +31,12 @@ const ProductDetailsClient = () => {
   const tomorrowDate = tomorrow.getDate();
   const tomorrowMonth = tomorrow.getMonth();
 
+  const dispatch = useDispatch();
+
+  const addToCart = () => {
+    dispatch(ADD_TO_CART({ ...product, quantity: count }));
+    dispatch(CALCULATE_TOTAL_QUANTITY());
+  };
   return (
     <section className={styles.product}>
       {product === null ? (
@@ -83,7 +91,7 @@ const ProductDetailsClient = () => {
                 <div className={styles.count}>
                   <Button
                     onClick={() => setCount((prev) => prev - 1)}
-                    disabled
+                    disabled={count === 1}
                     secondary
                   >
                     -
