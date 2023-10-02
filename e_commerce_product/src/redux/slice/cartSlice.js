@@ -5,7 +5,7 @@ const initialState = {
   cartItems:
     typeof window !== "undefined"
       ? localStorage.getItem("cartItems")
-        ? JSON.parse(localStorage.getItem("cartItem"))
+        ? JSON.parse(localStorage.getItem("cartItems"))
         : []
       : [],
   cartTotalQuantity: 0,
@@ -49,12 +49,68 @@ const cartSlice = createSlice({
         return acc + cur;
       });
 
-      state.totalQuantity = totalQuantity;
+      state.cartTotalQuantity = totalQuantity;
+    },
+    CALCULATE_SUBTOTAL: (state) => {
+      const array = [];
+
+      state.cartItems.forEach((item) => {
+        const { price, cartQuantity } = item;
+
+        const cartItemAmount = price * cartQuantity;
+        array.push(cartItemAmount);
+      });
+
+      const totalAmount = array.reduce((a, b) => {
+        return a + b;
+      });
+      state.cartTotalAmount = totalAmount;
+    },
+    SAVE_URL: (state, action) => {
+      state.previousURL = action.payload;
+    },
+    DECREASE_CART: (state, action) => {
+      const productIndex = state.cartItems.findIndex(
+        (item) => item.id === action.payload.id
+      );
+
+      if (state.cartItems[productIndex].cartQuantity > 1) {
+        state.cartItems[productIndex].cartQuantity -= 1;
+        toast.info(`${action.payload.name} 개수 -1`);
+      } else if (state.cartItems[productIndex].cartQuantity === 1) {
+        const newCartItem = state.cartItems.filter(
+          (item) => item.id === action.payload.id
+        );
+        state.cartItems = newCartItem;
+        toast.success(`${action.payload.name}이 장바구니에서 삭제되었습니다.`);
+      }
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+    },
+    REMOVE_FROM_CART: (state, action) => {
+      const newCartItem = state.cartItems.filter(
+        (item) => item.id != action.payload.id
+      );
+      state.cartItems = newCartItem;
+      toast.success(`${action.payload.name}이 장바구니에서 삭제되었습니다.`);
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
+    },
+    CLEAR_CART: (state, action) => {
+      state.cart = [];
+      toast.success("장바구니가 비었습니다.");
+      localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
   },
 });
 
-export const { ADD_TO_CART, CALCULATE_TOTAL_QUANTITY } = cartSlice.actions;
+export const {
+  ADD_TO_CART,
+  CALCULATE_TOTAL_QUANTITY,
+  CALCULATE_SUBTOTAL,
+  SAVE_URL,
+  DECREASE_CART,
+  REMOVE_FROM_CART,
+  CLEAR_CART,
+} = cartSlice.actions;
 
 export const selectCartItems = (state) => state.cart.cartItems;
 export const selectCartTotalQuantity = (state) => state.cart.cartTotalQuantity;
