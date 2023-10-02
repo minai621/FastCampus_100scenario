@@ -1,4 +1,4 @@
-import ProductDetailsClient from "./productDetailsClient";
+import ProductDetailsClient from "./ProductDetailsClient";
 
 const ProductDetails = () => {
   return <ProductDetailsClient />;

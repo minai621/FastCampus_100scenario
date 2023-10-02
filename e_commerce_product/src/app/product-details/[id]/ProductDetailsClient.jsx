@@ -4,7 +4,9 @@ import listCashIcon from "@/assets/list-cash-icon.png";
 import Button from "@/components/button/Button";
 import Divider from "@/components/divider/Divider";
 import Loader from "@/components/loader/Loader";
+import ProductReviewItem from "@/components/product/productReviewItem/ProductReviewItem";
 import useFetchDocument from "@/hooks/useFetchDocument";
+import useFetchDocuments from "@/hooks/useFetchDocuments";
 import priceFormat from "@/utils/priceFormat";
 import Image from "next/image";
 import { useParams } from "next/navigation";
@@ -15,9 +17,12 @@ import styles from "./ProductDetails.module.scss";
 const ProductDetailsClient = () => {
   const { id } = useParams();
   const { document: product } = useFetchDocument("products", id);
+  const { documents: reviews } = useFetchDocuments("reviews", [
+    "productID",
+    "==",
+    id,
+  ]);
   const [count, setCount] = useState(1);
-
-  const addToCart = () => {};
 
   const today = new Date();
   const tomorrow = new Date(today.setDate(today.getDate() + 1));
@@ -99,6 +104,22 @@ const ProductDetailsClient = () => {
           </div>
         </>
       )}
+      <div className={styles.card}>
+        <h3>상품평 ({reviews.length})</h3>
+        <div>
+          {reviews.length === 0 ? (
+            <p className={styles.noReviewText}>
+              해당 상품에 대한 상품평이 아직 없습니다.
+            </p>
+          ) : (
+            <>
+              {reviews.map((review) => {
+                return <ProductReviewItem key={review.id} {...review} />;
+              })}
+            </>
+          )}
+        </div>
+      </div>
     </section>
   );
 };
