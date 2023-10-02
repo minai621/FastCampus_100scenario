@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
+const CartClient = dynamic(() => import("./CartClient"), { ssr: false });
+
 const Cart = () => {
-  return <div>Cart</div>;
+  return <CartClient />;
 };
 
 export default Cart;
