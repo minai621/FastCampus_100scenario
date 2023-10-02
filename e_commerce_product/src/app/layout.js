@@ -1,6 +1,7 @@
 import ToastProvider from "@/components/toastProvider/ToastProvider";
 import Footer from "@/layouts/footer/Footer";
 import Header from "@/layouts/header/Header";
+import NavbarProvider from "@/layouts/navbar/NavbarProvider";
 import Provider from "@/redux/Provider";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -18,7 +19,7 @@ export default function RootLayout({ children }) {
       <body className={inter.className}>
         <Provider>
           <Header />
-          {children}
+          <NavbarProvider>{children}</NavbarProvider>
           <Footer />
         </Provider>
         <ToastProvider />
