@@ -1,6 +1,7 @@
-const OrderDetails = ({ params }) => {
-  const { id } = params;
-  return <div>OrderDetails</div>;
+import OrderDetailsClient from "./OrderDetailsClient";
+
+const OrderDetails = () => {
+  return <OrderDetailsClient />;
 };
 
 export default OrderDetails;
