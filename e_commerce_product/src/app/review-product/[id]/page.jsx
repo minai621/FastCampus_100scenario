@@ -1,5 +1,7 @@
+import ReviewProductClient from "./ReviewProductClient";
+
 const ReviewProduct = () => {
-  return <div>ReviewProduct</div>;
+  return <ReviewProductClient />;
 };
 
 export default ReviewProduct;
