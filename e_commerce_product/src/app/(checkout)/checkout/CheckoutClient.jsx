@@ -49,7 +49,8 @@ const CheckoutClient = () => {
       .then(async function (data) {
         const { orderId, paymentKey, amount } = data;
         const secretKey = process.env.NEXT_PUBLIC_TOSS_SECRET;
-        const url = "https://api.tosspayments.com/v1/payments/confirm";
+
+        const url = `https://api.tosspayments.com/v1/payments/confirm`;
         const basicToken = Buffer.from(`${secretKey}:`, "utf-8").toString(
           "base64"
         );
@@ -65,27 +66,29 @@ const CheckoutClient = () => {
             Authorization: `Basic ${basicToken}`,
             "Content-Type": "application/json",
           },
-        }).then((res) => res.json());
+        }).then((response) => response.json());
 
-        console.log("confirmResposne", confirmResponse);
+        console.log("confirmResponse", confirmResponse);
 
         const today = new Date();
         const date = today.toDateString();
         const time = today.toLocaleDateString();
+
         const orderData = {
           userId,
           userEmail,
-          orderData: date,
+          orderDate: date,
           orderTime: time,
           orderAmount: amount,
           orderStatus: "주문수락",
           cartItems,
           shippingAddress,
-          createAt: Timestamp.now().toDate(),
+          createdAt: Timestamp.now().toDate(),
         };
 
-        await addDoc(collection(db, "orders", orderData));
+        await addDoc(collection(db, "orders"), orderData);
         dispatch(CLEAR_CART());
+
         router.push(`/checkout-success?orderId=${orderId}`);
       })
       .catch((error) => {
