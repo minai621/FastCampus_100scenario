@@ -11,7 +11,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import styles from "./AddProduct.module.scss";
 
-const categories = [
+export const categories = [
   { id: 1, name: "Laptop" },
   { id: 2, name: "Eletronics" },
   { id: 3, name: "Fashion" },
