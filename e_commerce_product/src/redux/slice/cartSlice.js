@@ -47,7 +47,7 @@ const cartSlice = createSlice({
       });
       const totalQuantity = array.reduce((acc, cur) => {
         return acc + cur;
-      });
+      }, 0);
 
       state.cartTotalQuantity = totalQuantity;
     },
@@ -60,10 +60,9 @@ const cartSlice = createSlice({
         const cartItemAmount = price * cartQuantity;
         array.push(cartItemAmount);
       });
-
       const totalAmount = array.reduce((a, b) => {
         return a + b;
-      });
+      }, 0);
       state.cartTotalAmount = totalAmount;
     },
     SAVE_URL: (state, action) => {
