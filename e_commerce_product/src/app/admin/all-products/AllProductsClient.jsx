@@ -3,6 +3,7 @@ import Heading from "@/components/heading/Heading";
 import Loader from "@/components/loader/Loader";
 import Pagination from "@/components/pagination/Pagination";
 import Search from "@/components/search/Search";
+import { db, storage } from "@/firebase/firebase";
 import useFetchCollection from "@/hooks/useFetchCollection";
 import {
   FILTER_BY_SEARCH,
@@ -10,11 +11,15 @@ import {
 } from "@/redux/slice/filterSlice";
 import { STORE_PRODUCTS, selectProducts } from "@/redux/slice/productSlice";
 import priceFormat from "@/utils/priceFormat";
+import { deleteDoc, doc } from "firebase/firestore";
+import { deleteObject, ref } from "firebase/storage";
 import Image from "next/image";
 import Link from "next/link";
+import Notiflix from "notiflix";
 import { useEffect, useState } from "react";
 import { FaEdit, FaTrashAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import styles from "./AllProducts.module.scss";
 
 const AllProductsClient = () => {
@@ -25,10 +30,10 @@ const AllProductsClient = () => {
   const filteredProducts = useSelector(selectFilteredProducts);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const [productsPerPage] = useState(10);
+  const [productsPerPage] = useState(1);
 
   const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct + productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = filteredProducts.slice(
     indexOfFirstProduct,
     indexOfLastProduct
@@ -44,7 +49,39 @@ const AllProductsClient = () => {
     dispatch(FILTER_BY_SEARCH({ products, search }));
   }, [dispatch, products, search]);
 
-  const confirmDelete = (id, imageURL) => {};
+  const confirmDelete = (id, imageURL) => {
+    Notiflix.Confirm.show(
+      "상품 삭제하기",
+      "이 상품을 삭제하게 됩니다.",
+      "삭제",
+      "취소",
+      function okCb() {
+        deleteProduct(id, imageURL);
+      },
+      function cancelCb() {
+        console.log("삭제가 취소되었습니다.");
+      },
+      {
+        width: "320px",
+        borderRadius: "3px",
+        titleColor: "#4385F4",
+        okButtonBackground: "#4385F4",
+        cssAnimation: "zoom",
+      }
+    );
+  };
+
+  const deleteProduct = async (id, imageURL) => {
+    try {
+      await deleteDoc(doc(db, "products", id));
+
+      const storageRef = ref(storage, imageURL);
+      await deleteObject(storageRef);
+      toast.success("상품을 성공적으로 삭제했습니다.");
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   return (
     <>
@@ -77,7 +114,7 @@ const AllProductsClient = () => {
                   const { id, name, category, price, imageURL } = product;
 
                   return (
-                    <tr key={id} onClick={() => handleClick(id)}>
+                    <tr key={id}>
                       <td>{index + 1}</td>
                       <td>
                         <Image
