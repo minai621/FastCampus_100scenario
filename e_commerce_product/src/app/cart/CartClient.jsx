@@ -21,6 +21,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import styles from "./Cart.module.scss";
 
 const CartClient = () => {
@@ -34,15 +35,16 @@ const CartClient = () => {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const increaseCart = (cart) => {
-    dispatch(ADD_TO_CART({ cart }));
+    dispatch(ADD_TO_CART(cart));
   };
 
   const decreaseCart = (cart) => {
-    dispatch(DECREASE_CART({ cart }));
+    dispatch(DECREASE_CART(cart));
   };
 
   const removeFromCart = (cart) => {
-    dispatch(REMOVE_FROM_CART({ cart }));
+    dispatch(REMOVE_FROM_CART(cart));
+    toast.success(`${cart.name}이 장바구니에서 삭제되었습니다.`);
   };
 
   const clearCart = () => {

@@ -14,6 +14,7 @@ import { useParams } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Rating } from "react-simple-star-rating";
+import { toast } from "react-toastify";
 import styles from "./ProductDetails.module.scss";
 
 const ProductDetailsClient = () => {
@@ -35,6 +36,7 @@ const ProductDetailsClient = () => {
 
   const addToCart = () => {
     dispatch(ADD_TO_CART({ ...product, quantity: count }));
+    toast.success(`${product.name} 상품이 추가되었습니다.`);
     dispatch(CALCULATE_TOTAL_QUANTITY());
   };
   return (

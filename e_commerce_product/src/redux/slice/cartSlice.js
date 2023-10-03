@@ -28,11 +28,9 @@ const cartSlice = createSlice({
 
       if (productIndex >= 0) {
         state.cartItems[productIndex].cartQuantity += increaseCount;
-        toast.success(`${action.payload.name} 상품이 하나 추가되었습니다.`);
       } else {
         const tempProduct = { ...action.payload, cartQuantity: increaseCount };
         state.cartItems.push(tempProduct);
-        toast.success(`${action.payload.name} 상품이 추가되었습니다.`);
       }
 
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
@@ -90,7 +88,6 @@ const cartSlice = createSlice({
         (item) => item.id != action.payload.id
       );
       state.cartItems = newCartItem;
-      toast.success(`${action.payload.name}이 장바구니에서 삭제되었습니다.`);
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },
     CLEAR_CART: (state, action) => {
